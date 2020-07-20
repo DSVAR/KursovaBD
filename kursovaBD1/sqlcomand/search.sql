@@ -1,0 +1,1 @@
+﻿SELECT * FROM Clients WHERE FirstName  LIKE N'%Казах' 
