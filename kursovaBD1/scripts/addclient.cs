@@ -6,48 +6,58 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
-namespace kursovaBD.scripts
+namespace kursovaBD1.scripts
 {
     class addclient
     {
-        static public addClients adC = new addClients();
         static public DataGridView LCD = new DataGridView();
 
         static public TextBox Name, FirstN, LastN, number;
         static public ToolStripLabel label1;
-      static public  void addclients()
+
+        static public void addclients()
         {
 
-           
 
-            string sql1 = "SELECT Name, FirstName,LastName,number FROM Clients";
-            string sql = "INSERT INTO Clients (Name, FirstName, LastName, number) VALUES (N'"  + Name.Text + "'" + ", " + "N'" + FirstN.Text + "'" + ", " + "N'" + LastN.Text + "'" + ", " + number.Text + ")";
-            using (SqlConnection connection= new SqlConnection(Form1.connect))
+            string sqlALpeople = "INSERT INTO allpeople (Name, FirstName) VALUES ('" + Name.Text + "'" + ", " + "'" + FirstN.Text + "')";
+        //    string sql1 = "SELECT Name, FirstName,LastName,number FROM Clients";
+        //    string sql = "INSERT INTO Clients (Name, FirstName, LastName, number) VALUES ('" + Name.Text + "'" + ", " + "'" + FirstN.Text + "'" + ", " + "'" + LastN.Text + "'" + ", " + number.Text + ")";
+         string   sql= "INSERT INTO Clients(Name, FirstName, LastName, number) VALUES('"+Name.Text+"', '"+FirstN.Text+"', '"+LastN.Text+"', '"+number.Text+"')";
+            using (MySqlConnection connection= new MySqlConnection(Form1.connectM))
             {
                 connection.Open();
-                SqlCommand command = new SqlCommand(sql,connection);
+                MySqlCommand command = new MySqlCommand(sql,connection);
                 int numb = command.ExecuteNonQuery();
-              
                 connection.Close();
             }
-             using(SqlConnection connection1=new SqlConnection(Form1.connect))
+            
+         
+            using (MySqlConnection connection2=new MySqlConnection(Form1.connectM))
             {
-                connection1.Open();
-                SqlDataAdapter sqlData = new SqlDataAdapter(sql1,connection1);
+                connection2.Open();
+                MySqlCommand command = new MySqlCommand(sqlALpeople, connection2);
+                command.ExecuteNonQuery();
 
-                DataTable dt = new DataTable();
-                sqlData.Fill(dt);
-
-                LCD.Invoke((MethodInvoker)(() => LCD.DataSource = dt));
-                int kj = LCD.Rows.Count;
-                kj--;
-                label1.Text = kj.ToString();
-                connection1.Close();
+                connection2.Close();
             }
 
+            //using (SqlConnection connection1 = new SqlConnection(Form1.connect))
+            //{
+            //    connection1.Open();
+            //    SqlDataAdapter sqlData = new SqlDataAdapter(sql1, connection1);
+
+            //    DataTable dt = new DataTable();
+            //    sqlData.Fill(dt);
+
+            //    LCD.Invoke((MethodInvoker)(() => LCD.DataSource = dt));
+            //    int kj = LCD.Rows.Count;
+            //    kj--;
+            //    label1.Text = kj.ToString();
+            //    connection1.Close();
+            //}
+
         }
-
-
     }
 }
